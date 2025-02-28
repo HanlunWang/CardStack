@@ -22,7 +22,7 @@ Add this package to your Xcode project using Swift Package Manager:
 
 ### Basic Usage
 
-![Basic Usage Demo](https://github.com/HanlunWang/CardStack/demo/BasicUsage.gif)
+![Basic Usage Demo](https://github.com/HanlunWang/CardStack/blob/main/demo/BasicUsage.gif)
 
 ```swift
 import SwiftUI
@@ -40,8 +40,8 @@ CardStack(items, currentIndex: $currentIndex) { item in
 
 ### Enable Swipe Gestures
 
-![Swipeable Demo](https://github.com/HanlunWang/CardStack/demo/Swipe.gif)
-![Enhanced Swipeable Demo](https://github.com/HanlunWang/CardStack/demo/EnhancedSwipe.gif)
+![Swipeable Demo](https://github.com/HanlunWang/CardStack/blob/main/demo/Swipe.gif)
+![Enhanced Swipeable Demo](https://github.com/HanlunWang/CardStack/blob/main/demo/EnhancedSwipe.gif)
 
 ```swift
 // Add swipe gesture support with a simple modifier
@@ -59,7 +59,7 @@ CardStack(items, currentIndex: $currentIndex) { item in
 
 ### Add Random Card Angles
 
-![Random Card Angles Demo](https://github.com/HanlunWang/CardStack/demo/Combined.gif)
+![Random Card Angles Demo](https://github.com/HanlunWang/CardStack/blob/main/demo/Combined.gif)
 
 ```swift
 // Add random rotation angles to cards
