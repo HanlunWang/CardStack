@@ -1,5 +1,18 @@
 import SwiftUI
 
+// 添加 onChange 修饰符扩展 - 移到文件顶部
+extension Binding {
+    func onChange(_ handler: @escaping (Value) -> Void) -> Binding<Value> {
+        Binding(
+            get: { self.wrappedValue },
+            set: { newValue in
+                self.wrappedValue = newValue
+                handler(newValue)
+            }
+        )
+    }
+}
+
 /**
  A collection of example views demonstrating the CardStack component.
  
@@ -265,9 +278,35 @@ struct CardStackExamples {
                 VStack {
                     HStack {
                         Text("Max Angle: \(Int(maxRandomAngle))°")
-                        Slider(value: $maxRandomAngle, in: 0...20, step: 1)
+                        Spacer()
+                        Button(action: {
+                            if maxRandomAngle > 1 {
+                                maxRandomAngle -= 1
+                                refreshToggle.toggle()
+                            }
+                        }) {
+                            Image(systemName: "minus.circle")
+                                .font(.title2)
+                        }
+                        .disabled(maxRandomAngle <= 1)
+                        .padding(.horizontal, 5)
+                        
+                        Text("\(Int(maxRandomAngle))")
+                            .frame(minWidth: 30)
+                            .font(.headline)
+                        
+                        Button(action: {
+                            if maxRandomAngle < 15 {
+                                maxRandomAngle += 1
+                                refreshToggle.toggle()
+                            }
+                        }) {
+                            Image(systemName: "plus.circle")
+                                .font(.title2)
+                        }
+                        .disabled(maxRandomAngle >= 15)
+                        .padding(.horizontal, 5)
                     }
-                    .padding(.horizontal)
                 }
                 
                 // Button to regenerate random angles
@@ -313,6 +352,7 @@ struct CardStackExamples {
         @State private var swipeMode: SwipeMode = .none
         @State private var useRandomAngles = true
         @State private var maxRandomAngle = 5.0
+        @State private var refreshToggle = false  // 添加刷新触发器
         
         var body: some View {
             // Create a collection of colored items for the demo
@@ -347,6 +387,7 @@ struct CardStackExamples {
                         .frame(width: 220, height: 400)
                         .shadow(radius: 5)
                 }
+                .id(refreshToggle)  // 添加 id 以强制视图刷新
                 .padding(.bottom, 50)
                 
                 // Controls for swipe mode
@@ -361,13 +402,46 @@ struct CardStackExamples {
                     }
                     .pickerStyle(SegmentedPickerStyle())
                     
-                    Toggle("Use Random Angles", isOn: $useRandomAngles)
-                        .padding(.top)
+                    Toggle("Use Random Angles", isOn: Binding(
+                        get: { useRandomAngles },
+                        set: { 
+                            useRandomAngles = $0
+                            refreshToggle.toggle()  // 当 toggle 改变时刷新
+                        }
+                    ))
+                    .padding(.top)
                     
                     if useRandomAngles {
                         HStack {
                             Text("Max Angle: \(Int(maxRandomAngle))°")
-                            Slider(value: $maxRandomAngle, in: 1...15, step: 1)
+                            Spacer()
+                            Button(action: {
+                                if maxRandomAngle > 1 {
+                                    maxRandomAngle -= 1
+                                    refreshToggle.toggle()
+                                }
+                            }) {
+                                Image(systemName: "minus.circle")
+                                    .font(.title2)
+                            }
+                            .disabled(maxRandomAngle <= 1)
+                            .padding(.horizontal, 5)
+                            
+                            Text("\(Int(maxRandomAngle))")
+                                .frame(minWidth: 30)
+                                .font(.headline)
+                            
+                            Button(action: {
+                                if maxRandomAngle < 15 {
+                                    maxRandomAngle += 1
+                                    refreshToggle.toggle()
+                                }
+                            }) {
+                                Image(systemName: "plus.circle")
+                                    .font(.title2)
+                            }
+                            .disabled(maxRandomAngle >= 15)
+                            .padding(.horizontal, 5)
                         }
                     }
                 }
@@ -403,11 +477,6 @@ struct CardStackExamples {
                 EnhancedCardStackDemoView()
                     .tabItem {
                         Label("Swipeable", systemImage: "hand.draw")
-                    }
-                
-                ModifierRandomAnglesCardStackDemoView()
-                    .tabItem {
-                        Label("Random Angles", systemImage: "wand.and.stars")
                     }
                 
                 CombinedFeaturesView()
