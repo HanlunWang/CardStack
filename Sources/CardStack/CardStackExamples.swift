@@ -1,6 +1,5 @@
 import SwiftUI
 
-// 添加 onChange 修饰符扩展 - 移到文件顶部
 extension Binding {
     func onChange(_ handler: @escaping (Value) -> Void) -> Binding<Value> {
         Binding(
