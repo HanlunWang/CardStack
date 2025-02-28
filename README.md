@@ -1,6 +1,10 @@
+![Logo](https://github.com/HanlunWang/CardStack/blob/main/demo/Logo.png)
+
 # CardStack
 
 An elegant SwiftUI card stack component for creating beautiful, interactive card stack interfaces.
+
+![Basic Usage Demo](https://github.com/HanlunWang/CardStack/blob/main/demo/Demo.gif)
 
 ## Features
 
