@@ -5,6 +5,15 @@ import SwiftUI
 /// This struct provides customizable parameters to control the appearance and behavior
 /// of the CardStack view, including spacing, scaling, rotation, and animation properties.
 public struct CardStackConfiguration {
+    /// The swipe mode for the card stack
+    ///
+    /// Controls how cards respond to swipe gestures:
+    /// - none: No swipe gestures are enabled
+    /// - normal: Standard swipe gestures with basic animations
+    /// - enhanced: Advanced swipe gestures with more dynamic animations
+    /// Default: .none
+    public var swipeMode: SwipeMode = .none
+    
     /// The padding between cards in the stack
     /// 
     /// Controls the horizontal spacing between adjacent cards. Higher values create
@@ -54,6 +63,52 @@ public struct CardStackConfiguration {
     /// Default: 15.0
     public var swingOutMultiplier: Double = 15.0
     
+    /// Random angle settings
+    ///
+    /// Controls whether cards have random rotation angles applied and the maximum
+    /// angle of randomization. Set enabled to true to activate random angles.
+    /// Default: disabled with 0.0 maximum angle
+    public var randomAngles: RandomAnglesSettings = RandomAnglesSettings()
+    
     /// Creates a default configuration with standard values
     public init() {}
+    
+    /// Creates a configuration with the specified swipe mode
+    /// - Parameter swipeMode: The swipe mode to use
+    public init(swipeMode: SwipeMode) {
+        self.swipeMode = swipeMode
+    }
+}
+
+/// The swipe mode for the card stack
+public enum SwipeMode {
+    /// No swipe gestures are enabled
+    case none
+    
+    /// Standard swipe gestures with basic animations
+    case normal
+    
+    /// Advanced swipe gestures with more dynamic animations
+    case enhanced
+}
+
+/// Settings for random angle rotation of cards
+public struct RandomAnglesSettings {
+    /// Whether random angles are enabled
+    public var enabled: Bool = false
+    
+    /// The maximum random angle in degrees
+    public var maxAngle: Double = 5.0
+    
+    /// Creates default random angle settings (disabled)
+    public init() {}
+    
+    /// Creates random angle settings with the specified parameters
+    /// - Parameters:
+    ///   - enabled: Whether random angles are enabled
+    ///   - maxAngle: The maximum random angle in degrees
+    public init(enabled: Bool, maxAngle: Double = 5.0) {
+        self.enabled = enabled
+        self.maxAngle = maxAngle
+    }
 } 

@@ -303,6 +303,90 @@ struct CardStackExamples {
     }
     
     /**
+     A demonstration of the CardStack with combined features.
+     
+     This example shows how to use the new configuration-based approach
+     to combine swipeable functionality with random angles.
+     */
+    struct CombinedFeaturesView: View {
+        @State private var currentIndex = 0
+        @State private var swipeMode: SwipeMode = .none
+        @State private var useRandomAngles = true
+        @State private var maxRandomAngle = 5.0
+        
+        var body: some View {
+            // Create a collection of colored items for the demo
+            let colors = [
+                DemoItem(name: "#0 Red", color: .red),
+                DemoItem(name: "#1 Orange", color: .orange),
+                DemoItem(name: "#2 Yellow", color: .yellow),
+                DemoItem(name: "#3 Green", color: .green),
+                DemoItem(name: "#4 Blue", color: .blue),
+                DemoItem(name: "#5 Purple", color: .purple),
+            ]
+            
+            // Create a configuration with the current settings
+            var config = CardStackConfiguration()
+            config.swipeMode = swipeMode
+            config.randomAngles = RandomAnglesSettings(
+                enabled: useRandomAngles,
+                maxAngle: maxRandomAngle
+            )
+            
+            return VStack {
+                // CardStack with configuration
+                CardStack(colors, currentIndex: $currentIndex, configuration: config) { namedColor in
+                    RoundedRectangle(cornerRadius: 20, style: .continuous)
+                        .fill(namedColor.color)
+                        .overlay(
+                            Text(namedColor.name)
+                                .font(.largeTitle)
+                                .fontWeight(.bold)
+                                .foregroundColor(.white)
+                        )
+                        .frame(width: 220, height: 400)
+                        .shadow(radius: 5)
+                }
+                .padding(.bottom, 50)
+                
+                // Controls for swipe mode
+                VStack(alignment: .leading) {
+                    Text("Swipe Mode:")
+                        .font(.headline)
+                    
+                    Picker("Swipe Mode", selection: $swipeMode) {
+                        Text("None").tag(SwipeMode.none)
+                        Text("Normal").tag(SwipeMode.normal)
+                        Text("Enhanced").tag(SwipeMode.enhanced)
+                    }
+                    .pickerStyle(SegmentedPickerStyle())
+                    
+                    Toggle("Use Random Angles", isOn: $useRandomAngles)
+                        .padding(.top)
+                    
+                    if useRandomAngles {
+                        HStack {
+                            Text("Max Angle: \(Int(maxRandomAngle))°")
+                            Slider(value: $maxRandomAngle, in: 1...15, step: 1)
+                        }
+                    }
+                }
+                .padding()
+                .background(
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(Color.secondary.opacity(0.1))
+                )
+                .padding()
+                
+                Text("Current Card: \(currentIndex)")
+                    .font(.headline)
+                    .padding()
+            }
+            .padding()
+        }
+    }
+    
+    /**
      A combined view that showcases all CardStack demos in a tab view.
      
      This view provides a convenient way to navigate between the different
@@ -316,19 +400,19 @@ struct CardStackExamples {
                         Label("Standard", systemImage: "rectangle.stack")
                     }
                 
-                SwipeableCardStackDemoView()
-                    .tabItem {
-                        Label("Swipeable", systemImage: "hand.draw")
-                    }
-                
                 EnhancedCardStackDemoView()
                     .tabItem {
-                        Label("Enhanced", systemImage: "sparkles")
+                        Label("Swipeable", systemImage: "hand.draw")
                     }
                 
                 ModifierRandomAnglesCardStackDemoView()
                     .tabItem {
                         Label("Random Angles", systemImage: "wand.and.stars")
+                    }
+                
+                CombinedFeaturesView()
+                    .tabItem {
+                        Label("Combined", systemImage: "square.on.circle")
                     }
             }
         }
